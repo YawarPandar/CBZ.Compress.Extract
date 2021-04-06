@@ -18,6 +18,7 @@ namespace CBZCompressor
     public partial class CBZCompressor : Form
     {
         ProcessMode processMode = new ProcessMode();
+        string defaultExt = ".cbr_.cbz";
         public CBZCompressor()
         {
             InitializeComponent();
@@ -44,10 +45,13 @@ namespace CBZCompressor
             }            
         }
         private void ShowTempCover(string path)
-        {            
-            Image img = Image.FromFile(path);
-            img = resizeImage(img, new Size(new Point { X = 177, Y = 250 }));
-            coverImage.Image = img;
+        {
+            coverImage.Image = null;
+            using (Image img = Image.FromFile(path))
+            {
+                Image imgTmp = resizeImage(img, new Size(new Point { X = 177, Y = 250 }));
+                coverImage.Image = imgTmp;
+            }                
         }
         public static Image resizeImage(Image imgToResize, Size size)
         {
@@ -96,7 +100,37 @@ namespace CBZCompressor
                     file.ExtractArchive(destinationFolders.Text);
                     progress.Value++;
                 }
+
+
+                CheckNestedContent(destinationFolders.Text);
+
+                if (checkBox3.Checked) File.Delete(originFilesFull.Text);
             });
+            MessageBox.Show("Done! :)");
+            originFilesFull.Items.Clear();
+            destinationFolders.Items.Clear();
+            originFiles.Items.Clear();
+            progress.Value = 0;
+        }
+
+        private void CheckNestedContent(string path)
+        {
+            var nestedDirectories = Directory.GetDirectories(path);
+            if (nestedDirectories.Any())
+            {
+                nestedDirectories.ToList().ForEach(d =>
+                {
+                    var files = Directory.GetFiles(d);
+                    if (files.Any())
+                        files.ToList().ForEach(f =>
+                        {
+                            string destFile = Path.Combine(path, Path.GetFileName(f));
+                            if (!File.Exists(destFile)) File.Move(f, destFile);
+                        });
+                    Directory.Delete(d);
+                });
+                CheckNestedContent(path);
+            }
         }
         public string DebugContent(string path)
         {
@@ -156,6 +190,10 @@ namespace CBZCompressor
                 MessageBox.Show(string.Format("Errores found. {0} folders not compressed.", resultado.Count(x => !x)));
             else
                 MessageBox.Show("Done! :)");
+            originFolderFull.Items.Clear();  
+            destinationFiles.Items.Clear(); 
+            originFolders.Items.Clear();
+            progress.Value = 0;
         }
 
         private void LoadCbrs_Click(object sender, EventArgs e)
@@ -166,15 +204,17 @@ namespace CBZCompressor
         {
             originFiles.Items.Clear();
             destinationFolders.Items.Clear();
-            string[] subdirectoryEntries = Directory.GetFiles(pathCbrs.Text);
+            string[] subdirectoryEntries = Directory.GetFiles(pathCbrs.Text).Where(f => defaultExt.ToLower().Contains(Path.GetExtension(f).ToLower())).ToArray();
             originFilesFull.Items.AddRange(subdirectoryEntries);
-            originFiles.Items.AddRange(subdirectoryEntries.ToList().Select(s => Path.GetFileNameWithoutExtension(s)).ToArray());
+            originFiles.Items.AddRange(subdirectoryEntries.ToList()                
+                .Select(s => Path.GetFileNameWithoutExtension(s)).ToArray());
             destinationFolders.Items.AddRange(subdirectoryEntries.ToList().Select(s =>
             {
                 string directory = Path.GetDirectoryName(s);
                 string file = FormatName(Path.GetFileNameWithoutExtension(s));
                 return Path.Combine(directory, file);
             }).ToArray());
+            StatusMessage.Text = string.Format("Total folders: {0}", subdirectoryEntries.Count().ToString());
         }
         private string FormatName(string rawName)
         {

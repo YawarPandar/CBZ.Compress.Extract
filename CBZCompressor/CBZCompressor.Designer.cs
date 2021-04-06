@@ -42,6 +42,12 @@
             this.pathFolders = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.checkBox3 = new System.Windows.Forms.CheckBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.cbrNameExceps = new System.Windows.Forms.ListBox();
+            this.button3 = new System.Windows.Forms.Button();
+            this.cbrExc = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
             this.originFilesFull = new System.Windows.Forms.ListBox();
             this.destinationFolders = new System.Windows.Forms.ListBox();
             this.originFiles = new System.Windows.Forms.ListBox();
@@ -53,11 +59,6 @@
             this.StatusMessage = new System.Windows.Forms.Label();
             this.processBtn = new System.Windows.Forms.Button();
             this.progress = new System.Windows.Forms.ProgressBar();
-            this.button2 = new System.Windows.Forms.Button();
-            this.cbrNameExceps = new System.Windows.Forms.ListBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.cbrExc = new System.Windows.Forms.TextBox();
-            this.label12 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.coverImage)).BeginInit();
@@ -91,7 +92,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(733, 345);
+            this.tabPage1.Size = new System.Drawing.Size(1010, 345);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Compress";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -189,7 +190,7 @@
             this.pathFolders.Name = "pathFolders";
             this.pathFolders.Size = new System.Drawing.Size(366, 20);
             this.pathFolders.TabIndex = 40;
-            this.pathFolders.Text = "D:\\VPK\\Zip";
+            this.pathFolders.Text = "D:\\VPK\\CBR\\_Post_";
             // 
             // label6
             // 
@@ -202,6 +203,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.checkBox3);
             this.tabPage2.Controls.Add(this.button2);
             this.tabPage2.Controls.Add(this.cbrNameExceps);
             this.tabPage2.Controls.Add(this.button3);
@@ -221,6 +223,62 @@
             this.tabPage2.TabIndex = 2;
             this.tabPage2.Text = "Extract";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // checkBox3
+            // 
+            this.checkBox3.AutoSize = true;
+            this.checkBox3.Checked = true;
+            this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox3.Location = new System.Drawing.Point(568, 27);
+            this.checkBox3.Name = "checkBox3";
+            this.checkBox3.Size = new System.Drawing.Size(85, 17);
+            this.checkBox3.TabIndex = 78;
+            this.checkBox3.Text = "Delete origin";
+            this.checkBox3.UseVisualStyleBackColor = true;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(163, 87);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(25, 20);
+            this.button2.TabIndex = 77;
+            this.button2.Text = "x";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
+            // cbrNameExceps
+            // 
+            this.cbrNameExceps.FormattingEnabled = true;
+            this.cbrNameExceps.Location = new System.Drawing.Point(3, 113);
+            this.cbrNameExceps.Name = "cbrNameExceps";
+            this.cbrNameExceps.Size = new System.Drawing.Size(185, 225);
+            this.cbrNameExceps.TabIndex = 76;
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(136, 87);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(21, 20);
+            this.button3.TabIndex = 75;
+            this.button3.Text = "+";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
+            // 
+            // cbrExc
+            // 
+            this.cbrExc.Location = new System.Drawing.Point(3, 87);
+            this.cbrExc.Name = "cbrExc";
+            this.cbrExc.Size = new System.Drawing.Size(127, 20);
+            this.cbrExc.TabIndex = 74;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(3, 71);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(71, 13);
+            this.label12.TabIndex = 73;
+            this.label12.Text = "Name Excep.";
             // 
             // originFilesFull
             // 
@@ -282,6 +340,7 @@
             this.pathCbrs.Name = "pathCbrs";
             this.pathCbrs.Size = new System.Drawing.Size(366, 20);
             this.pathCbrs.TabIndex = 58;
+            this.pathCbrs.Text = "D:\\VPK\\CBR\\_Post_";
             // 
             // label15
             // 
@@ -317,50 +376,6 @@
             this.progress.Name = "progress";
             this.progress.Size = new System.Drawing.Size(463, 23);
             this.progress.TabIndex = 58;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(163, 87);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(25, 20);
-            this.button2.TabIndex = 77;
-            this.button2.Text = "x";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // cbrNameExceps
-            // 
-            this.cbrNameExceps.FormattingEnabled = true;
-            this.cbrNameExceps.Location = new System.Drawing.Point(3, 113);
-            this.cbrNameExceps.Name = "cbrNameExceps";
-            this.cbrNameExceps.Size = new System.Drawing.Size(185, 225);
-            this.cbrNameExceps.TabIndex = 76;
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(136, 87);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(21, 20);
-            this.button3.TabIndex = 75;
-            this.button3.Text = "+";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // cbrExc
-            // 
-            this.cbrExc.Location = new System.Drawing.Point(3, 87);
-            this.cbrExc.Name = "cbrExc";
-            this.cbrExc.Size = new System.Drawing.Size(127, 20);
-            this.cbrExc.TabIndex = 74;
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(3, 71);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(71, 13);
-            this.label12.TabIndex = 73;
-            this.label12.Text = "Name Excep.";
             // 
             // CBZCompressor
             // 
@@ -418,6 +433,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.TextBox cbrExc;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.CheckBox checkBox3;
     }
 }
 
