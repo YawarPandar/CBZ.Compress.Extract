@@ -64,15 +64,21 @@ namespace CBZCompressor
         }
         private void CompressAll_Click_1(object sender, EventArgs e)
         {
+
+            BackgroundWorker bw = new BackgroundWorker();            
             switch (processMode)
             {
                 case ProcessMode.Compress:
+                    //bw.DoWork += Compress;
                     Compress();
                     break;
                 case ProcessMode.Extract:
-                    Extract();
+                    bw.DoWork += Extract;
+                    bw.RunWorkerCompleted += ExtractFinished;
+                    //Extract();
                     break;
             }
+            bw.RunWorkerAsync();
         }
         private ImageCodecInfo GetEncoder(ImageFormat format)
         {
@@ -86,33 +92,47 @@ namespace CBZCompressor
             }
             return null;
         }
-        private void Extract()
+        private void Extract(object sender, DoWorkEventArgs e)
         {
             SevenZipBase.SetLibraryPath(@"C:\Program Files\7-Zip\7z64.dll");
             string[] fileNames = originFiles.Items.OfType<string>().ToArray();
-            progress.Maximum = fileNames.Count();
-            progress.Value = 0;
+            progress.Invoke((Action)delegate
+            {
+                progress.Maximum = fileNames.Count();
+                progress.Value = 0;
+            });
             fileNames.ToList().ForEach(s =>
             {
-                originFiles.Text = s;
+                originFiles.Invoke((Action)delegate
+                {
+                    originFiles.Text = s;
+                });
+                var destinationFile = string.Empty;
                 using (var file = new SevenZipExtractor(originFilesFull.Text))
                 {
-                    file.ExtractArchive(destinationFolders.Text);
-                    progress.Value++;
+                    destinationFiles.Invoke((Action)delegate
+                    {
+                        destinationFile = destinationFolders.Text;
+                    });
+                    file.ExtractArchive(destinationFile);
+                    progress.Invoke((Action)delegate
+                    {
+                        progress.Value++;
+                    });
                 }
-
-
-                CheckNestedContent(destinationFolders.Text);
+                if (!string.IsNullOrEmpty(destinationFile)) CheckNestedContent(destinationFile);
 
                 if (checkBox3.Checked) File.Delete(originFilesFull.Text);
             });
+        }
+        private void ExtractFinished(object sender, RunWorkerCompletedEventArgs e)
+        {
             MessageBox.Show("Done! :)");
             originFilesFull.Items.Clear();
             destinationFolders.Items.Clear();
             originFiles.Items.Clear();
             progress.Value = 0;
         }
-
         private void CheckNestedContent(string path)
         {
             var nestedDirectories = Directory.GetDirectories(path);
@@ -161,6 +181,7 @@ namespace CBZCompressor
             });
             return tempPath;            
         }
+        //private void Compress(object sender, DoWorkEventArgs e)
         private void Compress()
         {
             string[] folderNames = originFolders.Items.OfType<string>().ToArray();
